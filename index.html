@@ -1634,7 +1634,9 @@ function showSlide(idx) {
     // Stop any prior narration before swapping source
     stopSpeak();
     if (!muted) playSlideAudio(idx);
-    if (autoAdvance) scheduleAuto();
+    // No fixed timer — auto-advance fires on the audio's "ended" event instead.
+    // Fallback safety timer kicks in only if audio fails to load within 90s.
+    if (autoAdvance) armFallbackTimer();
 }
 
 function next() {
@@ -1667,6 +1669,13 @@ function playSlideAudio(idx) {
 audioPlayer.addEventListener('ended', () => {
     speechDot.classList.remove('speaking');
     speechStatus.textContent = 'READY';
+    // Audio finished — if auto-advance is on, move to next slide after a brief pause
+    if (autoAdvance) {
+        clearTimeout(autoTimer);
+        autoTimer = setTimeout(() => {
+            if (autoAdvance) next();
+        }, 1500); // 1.5s pause between slides for natural rhythm
+    }
 });
 
 audioPlayer.addEventListener('pause', () => {
@@ -1680,6 +1689,8 @@ function stopSpeak() {
     audioPlayer.currentTime = 0;
     speechDot.classList.remove('speaking');
     speechStatus.textContent = 'READY';
+    // Cancel any pending auto-advance so a stale timer can't fire mid-slide
+    clearTimeout(autoTimer);
 }
 
 function speak(_text) {
@@ -1707,17 +1718,31 @@ btnMute.addEventListener('click', () => {
 });
 
 const btnAuto = document.getElementById('btnAuto');
-function scheduleAuto() {
+
+// Fallback timer: only used if the audio file never loads / fires `ended`.
+// Real auto-advance is driven by the audioPlayer 'ended' event handler.
+function armFallbackTimer() {
     clearTimeout(autoTimer);
-    autoTimer = setTimeout(() => { if (autoAdvance) next(); }, 17000);
+    autoTimer = setTimeout(() => {
+        // Audio never finished after 90s — advance anyway so the deck doesn't stall
+        if (autoAdvance) next();
+    }, 90000);
 }
+
 function toggleAuto() {
     autoAdvance = !autoAdvance;
     btnAuto.classList.toggle('play-active', autoAdvance);
     btnAuto.textContent = autoAdvance ? '❚❚' : '▶';
     btnAuto.title = autoAdvance ? 'Stop auto-advance' : 'Auto-advance';
-    if (autoAdvance) scheduleAuto();
-    else clearTimeout(autoTimer);
+    if (autoAdvance) {
+        armFallbackTimer();
+        // If audio is already over by the time auto-advance is enabled, jump ahead
+        if (audioPlayer.ended || audioPlayer.paused && audioPlayer.currentTime > 0) {
+            setTimeout(() => { if (autoAdvance) next(); }, 1500);
+        }
+    } else {
+        clearTimeout(autoTimer);
+    }
 }
 btnAuto.addEventListener('click', toggleAuto);
 
