@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BiRAGAS Utilization & Revenue Potential — Strategic Presentation</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root {
+    --navy: #0B1F3A;
+    --navy-deep: #050E1F;
+    --navy-soft: #14305B;
+    --gold: #C9A227;
+    --gold-soft: #E8C76A;
+    --gold-deep: #8A6D3B;
+    --cream: #F5EFE0;
+    --slate: #E6EAF0;
+    --slate-dim: #A8B3C5;
+    --green: #4CAF50;
+    --green-soft: #81C784;
+    --teal: #4FC3F7;
+    --purple: #BA68C8;
+    --red: #E57373;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--slate);
+}
+.bg-canvas {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, var(--navy-soft) 0%, var(--navy) 35%, var(--navy-deep) 100%);
+}
+#particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+.aurora {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 2; pointer-events: none;
+    background:
+        radial-gradient(ellipse 1200px 600px at 20% 30%, rgba(201,162,39,.10), transparent 60%),
+        radial-gradient(ellipse 1000px 500px at 80% 70%, rgba(20,48,91,.4), transparent 60%),
+        radial-gradient(ellipse 800px 400px at 50% 50%, rgba(76,175,80,.05), transparent 60%);
+    animation: auroraMove 20s ease-in-out infinite alternate;
+}
+@keyframes auroraMove { 0%{transform:translate(0,0)scale(1);} 50%{transform:translate(-30px,20px)scale(1.05);} 100%{transform:translate(20px,-15px)scale(1);} }
+.helix {
+    position: fixed; right: 40px; top: 50%; transform: translateY(-50%);
+    width: 60px; height: 400px; z-index: 3; opacity: 0.15; pointer-events: none;
+}
+.helix::before, .helix::after {
+    content: ""; position: absolute; left: 50%; width: 5px; height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--gold-soft), transparent);
+    transform-origin: center;
+}
+.helix::before { animation: helixA 8s linear infinite; }
+.helix::after { animation: helixB 8s linear infinite; }
+@keyframes helixA { 0%{transform:translateX(-50%) rotateY(0deg);} 100%{transform:translateX(-50%) rotateY(360deg);} }
+@keyframes helixB { 0%{transform:translateX(-50%) rotateY(180deg);} 100%{transform:translateX(-50%) rotateY(540deg);} }
+
+.stage {
+    position: relative; z-index: 10;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    padding: 30px;
+}
+.slide {
+    position: absolute;
+    width: 94%; max-width: 1400px;
+    height: 90%; max-height: 820px;
+    padding: 38px 56px;
+    background: rgba(11, 31, 58, 0.62);
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    border: 1px solid rgba(201,162,39,.30);
+    border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .55s ease, transform .55s ease;
+}
+.slide.active { display: flex; opacity: 1; transform: translateY(0); }
+
+.slide-eyebrow {
+    color: var(--gold-soft);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.slide-title {
+    color: #FFFFFF;
+    font-size: 32px; font-weight: 700;
+    letter-spacing: -0.5px; line-height: 1.15;
+    margin-bottom: 6px;
+}
+.slide-subtitle {
+    color: var(--gold-soft);
+    font-size: 15px; font-weight: 400;
+    font-style: italic; line-height: 1.4;
+    margin-bottom: 14px;
+}
+.divider {
+    width: 70px; height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    border-radius: 2px; margin-bottom: 14px;
+}
+.slide-body {
+    flex: 1; overflow: hidden;
+    display: flex; flex-direction: column;
+    gap: 10px;
+}
+.slide-body p { color: var(--slate); font-size: 14.5px; line-height: 1.5; }
+.lead { font-size: 16px; color: #FFFFFF; line-height: 1.5; }
+
+/* Layout: left content + right chart */
+.split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    flex: 1;
+    min-height: 0;
+}
+.split-left { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.split-right { position: relative; min-height: 0; min-width: 0; }
+.chart-box {
+    width: 100%; height: 100%;
+    min-height: 280px;
+    background: rgba(5, 14, 31, 0.4);
+    border: 1px solid rgba(201, 162, 39, 0.2);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+}
+.chart-box canvas { max-width: 100%; max-height: 100%; }
+.chart-title {
+    position: absolute; top: 8px; left: 14px;
+    color: var(--gold-soft); font-size: 11px;
+    letter-spacing: 1.2px; text-transform: uppercase; font-weight: 700;
+}
+
+/* Full-width chart variant */
+.chart-full {
+    width: 100%; flex: 1;
+    background: rgba(5,14,31,.4);
+    border: 1px solid rgba(201,162,39,.2);
+    border-radius: 10px;
+    padding: 18px;
+    position: relative;
+    min-height: 0;
+}
+
+/* KPI grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 4px 0 10px;
+}
+.kpi-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.kpi {
+    padding: 12px 10px;
+    background: linear-gradient(160deg, rgba(20,48,91,.7), rgba(11,31,58,.4));
+    border: 1px solid rgba(201,162,39,.25);
+    border-radius: 10px;
+    text-align: center;
+}
+.kpi-label {
+    color: var(--gold-soft);
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    margin-bottom: 4px;
+}
+.kpi-value { color: #FFFFFF; font-size: 22px; font-weight: 700; line-height: 1.1; }
+.kpi-sub { color: var(--slate-dim); font-size: 10px; margin-top: 3px; }
+
+/* Bullets */
+.bullets { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.bullets li {
+    position: relative; padding-left: 22px;
+    font-size: 14px; color: var(--slate); line-height: 1.5;
+}
+.bullets li::before {
+    content: "▸"; position: absolute; left: 0; top: 0;
+    color: var(--gold); font-weight: bold;
+}
+.bullets li strong { color: #FFFFFF; }
+
+/* Tables */
+.tbl { width: 100%; border-collapse: collapse; margin: 4px 0; font-size: 12.5px; }
+.tbl th {
+    background: var(--navy-deep); color: var(--gold-soft);
+    padding: 8px 10px; text-align: left; font-weight: 600;
+    font-size: 11px; letter-spacing: .8px; text-transform: uppercase;
+    border-bottom: 2px solid var(--gold);
+}
+.tbl td {
+    padding: 7px 10px; color: var(--slate);
+    border-bottom: 1px solid rgba(201,162,39,.12);
+}
+.tbl tr:nth-child(even) td { background: rgba(11,31,58,.35); }
+.tbl td:first-child { color: #FFFFFF; font-weight: 600; }
+.tbl tr.highlight td { background: rgba(201,162,39,.14); color: #FFF; font-weight: 700; }
+
+/* Two-col */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.col-card {
+    padding: 14px 16px;
+    background: rgba(20,48,91,.45);
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+}
+.col-card h3 { color: var(--gold-soft); font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.col-card p, .col-card li { font-size: 13px; color: var(--slate); line-height: 1.45; }
+
+/* Callout */
+.callout {
+    margin: 8px 0; padding: 12px 16px;
+    background: linear-gradient(135deg, rgba(201,162,39,.18), rgba(201,162,39,.05));
+    border-left: 4px solid var(--gold);
+    border-radius: 6px;
+}
+.callout-title {
+    color: var(--gold-soft); font-size: 11.5px; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 4px;
+}
+.callout p { color: #FFFFFF; font-size: 13.5px; line-height: 1.45; }
+
+/* Cover */
+.cover { text-align: center; justify-content: center; align-items: center; padding: 60px; }
+.cover-brand {
+    font-size: 82px; font-weight: 800;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--gold-soft) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -3px; margin-bottom: 14px;
+}
+.cover-tag { color: var(--gold-soft); font-size: 20px; font-style: italic; margin-bottom: 30px; line-height: 1.4; }
+.cover-meta { color: var(--slate-dim); font-size: 13px; letter-spacing: 1.5px; }
+.cover-divider {
+    width: 200px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 24px auto;
+}
+
+/* Section divider */
+.section-divider { text-align: center; justify-content: center; align-items: center; }
+.section-number {
+    color: var(--gold); font-size: 130px; font-weight: 800;
+    line-height: 1; opacity: 0.85;
+    text-shadow: 0 4px 40px rgba(201,162,39,.4);
+}
+.section-title { color: #FFFFFF; font-size: 40px; font-weight: 700; margin-top: 20px; }
+.section-tag { color: var(--gold-soft); font-size: 17px; font-style: italic; margin-top: 12px; }
+
+/* Controls */
+.controls {
+    position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 100; display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px;
+    background: rgba(5,14,31,.85);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(201,162,39,.4);
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
+}
+.ctrl-btn {
+    background: none; border: 1px solid var(--gold);
+    color: var(--gold-soft); width: 34px; height: 34px;
+    border-radius: 50%; cursor: pointer; font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s;
+}
+.ctrl-btn:hover { background: var(--gold); color: var(--navy-deep); transform: scale(1.05); }
+.ctrl-btn.play-active { background: var(--green); border-color: var(--green); color: #FFF; }
+.ctrl-btn.mute-active { background: var(--red); border-color: var(--red); color: #FFF; }
+.slide-counter {
+    color: var(--slate); font-size: 12.5px; font-weight: 600;
+    padding: 0 10px;
+    border-left: 1px solid rgba(201,162,39,.3);
+    border-right: 1px solid rgba(201,162,39,.3);
+    min-width: 78px; text-align: center;
+}
+.progress-bar {
+    position: fixed; top: 0; left: 0; height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-soft));
+    z-index: 200;
+    box-shadow: 0 0 12px var(--gold);
+    transition: width .4s ease;
+}
+
+/* Speech indicator */
+.speech-indicator {
+    position: fixed; top: 14px; right: 22px; z-index: 100;
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    background: rgba(5,14,31,.85);
+    border: 1px solid rgba(201,162,39,.4);
+    border-radius: 24px;
+    color: var(--slate); font-size: 11px; font-weight: 600; letter-spacing: .5px;
+}
+.speech-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--slate-dim); }
+.speech-dot.speaking { background: var(--gold); animation: pulse 1s ease-in-out infinite; box-shadow: 0 0 12px var(--gold); }
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1;} 50%{transform:scale(1.5);opacity:.6;} }
+
+/* Brand bug */
+.brand-bug {
+    position: absolute; top: 22px; right: 28px;
+    color: var(--gold-soft); font-size: 11px;
+    font-weight: 700; letter-spacing: 2px; opacity: .6;
+}
+
+/* Voice selector */
+.voice-pick {
+    position: fixed; top: 14px; left: 22px; z-index: 100;
+    padding: 6px 10px;
+    background: rgba(5,14,31,.85);
+    border: 1px solid rgba(201,162,39,.4);
+    border-radius: 8px;
+    color: var(--slate); font-size: 11px;
+    max-width: 320px;
+}
+.voice-pick select {
+    background: var(--navy-deep);
+    color: var(--gold-soft);
+    border: 1px solid var(--gold);
+    padding: 3px 6px; border-radius: 4px;
+    font-size: 11px; max-width: 240px;
+}
+.voice-quality {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--navy-deep);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    margin-left: 6px;
+    letter-spacing: .5px;
+}
+
+/* Hint */
+.hint {
+    position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%);
+    z-index: 99;
+    padding: 6px 14px;
+    background: rgba(201,162,39,.12);
+    border: 1px solid rgba(201,162,39,.5);
+    border-radius: 20px;
+    color: var(--gold-soft); font-size: 11px; letter-spacing: .8px;
+    animation: fadeOut 7s ease-out forwards;
+}
+@keyframes fadeOut { 0%,75%{opacity:1;} 100%{opacity:0;visibility:hidden;} }
+
+/* Mini metric */
+.mini-metric {
+    padding: 10px;
+    background: rgba(20,48,91,.5);
+    border-radius: 8px;
+    border-top: 3px solid var(--gold);
+    text-align: center;
+}
+.mini-metric .v { color: var(--gold-soft); font-size: 18px; font-weight: 700; }
+.mini-metric .l { color: var(--slate); font-size: 11px; margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<canvas class="bg-canvas" id="bgCanvas"></canvas>
+<canvas id="particles"></canvas>
+<div class="aurora"></div>
+<div class="helix"></div>
+
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+
+<div class="speech-indicator">
+    <div class="speech-dot" id="speechDot"></div>
+    <span id="speechStatus">READY</span>
+</div>
+
+<audio id="audioPlayer" preload="auto"></audio>
+
+<div class="hint">← → SPACE to navigate · M mute · A auto-advance · R replay narration</div>
+
+<div class="stage" id="stage"></div>
+
+<div class="controls">
+    <button class="ctrl-btn" id="btnPrev" title="Previous">‹</button>
+    <button class="ctrl-btn" id="btnRestart" title="Replay narration">⟲</button>
+    <button class="ctrl-btn" id="btnMute" title="Mute">♪</button>
+    <button class="ctrl-btn" id="btnAuto" title="Auto-advance">▶</button>
+    <span class="slide-counter" id="counter">1 / 55</span>
+    <button class="ctrl-btn" id="btnNext" title="Next">›</button>
+</div>
+
+<script>
+/* ============================================
+   CHART.JS GLOBAL THEME
+============================================ */
+const CHART_COLORS = {
+    gold: '#C9A227',
+    goldSoft: '#E8C76A',
+    goldDark: '#8A6D3B',
+    navy: '#0B1F3A',
+    navySoft: '#14305B',
+    green: '#4CAF50',
+    greenSoft: '#81C784',
+    teal: '#4FC3F7',
+    purple: '#BA68C8',
+    red: '#E57373',
+    slate: '#E6EAF0',
+    slateDim: '#A8B3C5'
+};
+const palette = ['#C9A227', '#4FC3F7', '#81C784', '#BA68C8', '#E8C76A', '#4CAF50', '#E57373', '#14305B', '#A8B3C5', '#8A6D3B'];
+
+if (window.Chart) {
+    Chart.defaults.color = '#E6EAF0';
+    Chart.defaults.borderColor = 'rgba(201,162,39,.12)';
+    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif';
+    Chart.defaults.font.size = 11;
+    Chart.defaults.plugins.legend.labels.color = '#E6EAF0';
+    Chart.defaults.plugins.legend.labels.boxWidth = 12;
+    Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(5,14,31,.95)';
+    Chart.defaults.plugins.tooltip.borderColor = '#C9A227';
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
+    Chart.defaults.plugins.tooltip.titleColor = '#E8C76A';
+    Chart.defaults.plugins.tooltip.bodyColor = '#FFFFFF';
+}
+
+const baseScaleOpts = {
+    grid: { color: 'rgba(201,162,39,.08)', drawBorder: false },
+    ticks: { color: '#A8B3C5', font: { size: 10 } }
+};
+
+/* ============================================
+   SLIDES — 55 slides with chart configs
+============================================ */
+const SLIDES = [
+
+/* 1 — COVER */
+{ type: "cover", body: `
+    <div class="cover-brand">BiRAGAS™</div>
+    <div class="cover-tag">Utilization & Revenue Potential<br>A Comprehensive Strategic Review</div>
+    <div class="cover-divider"></div>
+    <div class="cover-meta">CROSS-VERTICAL MARKET MAPPING · LICENSING ECONOMICS · MONETIZATION</div>
+    <div style="margin-top:30px;color:#CFD7E6;font-size:13px;">Prepared by Ayass Bioscience, LLC · for BiRAGAS, Inc.</div>
+    <div style="color:#A8B3C5;font-size:11px;margin-top:6px;">Strategic Planning · May 2026 · Confidential</div>
+`,
+narration: "Welcome to the BiRAGAS Utilization and Revenue Potential Strategic Review. This presentation maps how the BiRAGAS platform monetizes across ten distinct verticals, from drug discovery to consumer wellness, and quantifies the path to two hundred eighty seven million dollars in Year five recurring revenue."
+},
+
+/* 2 — section */
+{ type: "section", body: `
+    <div class="section-number">01</div>
+    <div class="section-title">Executive Summary</div>
+    <div class="section-tag">The thesis, the math, the moat</div>
+`, narration: "Section one. Executive Summary. The thesis, the math, and the moat that make BiRAGAS a multi vertical money making engine."
+},
+
+/* 3 — KPI + donut of vertical revenue mix */
+{ eyebrow: "EXECUTIVE SUMMARY", title: "BiRAGAS is infrastructure, not a single product",
+  subtitle: "One engine, ten verticals, five revenue streams",
+  layout: "split",
+  bodyLeft: `
+    <p class="lead">BiRAGAS is the first vertically integrated biomedical reasoning and agentic platform built to operate across the entire span of life science value creation.</p>
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">Aggregate TAM 2030</div><div class="kpi-value">$8.9 T</div></div>
+        <div class="kpi"><div class="kpi-label">Year 5 ARR</div><div class="kpi-value">$287 M</div></div>
+        <div class="kpi"><div class="kpi-label">Verticals</div><div class="kpi-value">10</div></div>
+        <div class="kpi"><div class="kpi-label">Gross Margin</div><div class="kpi-value">78%</div></div>
+    </div>
+    <p>The same engine that discovers an AML target predicts diabetic kidney disease progression and stratifies wellness risk.</p>
+  `,
+  chartTitle: "Year 5 Revenue by Vertical ($M)",
+  chart: {
+    type: 'doughnut',
+    data: {
+        labels: ['Autoimmune','Wellness','Wound+AMR','Alzheimer/Neuro','AI Drug Disc.','Agentic AI','DKD','Melanoma','AML','Pancreatic'],
+        datasets: [{
+            data: [48, 42, 35, 31, 28, 27, 22, 19.5, 18.5, 16],
+            backgroundColor: palette,
+            borderColor: '#0B1F3A',
+            borderWidth: 2
+        }]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { position: 'right', labels: { font:{size:10}, padding: 8 } } }
+    }
+  },
+  narration: "BiRAGAS is infrastructure, not a single product. One causal engine serves ten verticals through five revenue streams. The aggregate addressable market exceeds eight point nine trillion dollars by twenty thirty. Year five recurring revenue target is two hundred eighty seven million dollars at approximately seventy eight percent blended gross margin."
+},
+
+/* 4 — Headline conclusions */
+{ eyebrow: "EXECUTIVE SUMMARY", title: "Four headline conclusions",
+  subtitle: "What this report quantifies",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Addressable opportunity.</strong> Ten verticals · aggregate TAM exceeding $8.9T in 2030.</li>
+        <li><strong>5-year revenue capture.</strong> $287M Year 5 ARR base case across 5 streams.</li>
+        <li><strong>Defensible competitive position.</strong> 8-of-8 head-to-head capability dimensions.</li>
+        <li><strong>Path to outsize valuation.</strong> $300–500M Series A entry · $2–4B exit envelope.</li>
+    </ul>
+  `,
+  chartTitle: "BiRAGAS 5-Year Revenue Trajectory ($M)",
+  chart: {
+    type: 'line',
+    data: {
+        labels: ['Y1','Y2','Y3','Y4','Y5'],
+        datasets: [{
+            label: 'Total Revenue',
+            data: [9.4, 44, 109, 193.5, 287],
+            borderColor: CHART_COLORS.gold,
+            backgroundColor: 'rgba(201,162,39,.18)',
+            tension: 0.35,
+            fill: true,
+            pointBackgroundColor: CHART_COLORS.goldSoft,
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            borderWidth: 3
+        },{
+            label: 'Gross Profit (78%)',
+            data: [7.3, 34.3, 85, 150.9, 223.9],
+            borderColor: CHART_COLORS.green,
+            backgroundColor: 'transparent',
+            tension: 0.35,
+            borderDash: [6, 4],
+            pointBackgroundColor: CHART_COLORS.greenSoft,
+            pointRadius: 4
+        }]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { y: { ...baseScaleOpts, title: { display: true, text: 'USD millions', color: '#A8B3C5' } }, x: baseScaleOpts }
+    }
+  },
+  narration: "Four headline conclusions. First, the addressable opportunity exceeds eight point nine trillion dollars. Second, year five revenue reaches two hundred eighty seven million in the base case. Third, BiRAGAS holds a defensible competitive position across eight capability dimensions. Fourth, the path to a two to four billion dollar exit valuation is supported by public comparables."
+},
+
+/* 5 — section */
+{ type: "section", body: `
+    <div class="section-number">02</div>
+    <div class="section-title">The BiRAGAS Platform</div>
+    <div class="section-tag">Architecture as a revenue lever</div>
+`, narration: "Section two. The BiRAGAS Platform. Architecture as a revenue lever."
+},
+
+/* 6 — Three layers */
+{ eyebrow: "PLATFORM ARCHITECTURE", title: "Three layers, one platform",
+  subtitle: "Evidence · Reasoning · Orchestration",
+  body: `
+    <div class="two-col">
+        <div class="col-card"><h3>Evidence Layer</h3><p>Curated, vector-indexed biomedical knowledge across 8.6 million vectors. Thirteen live API integrations. Every diagnostic call traces to source literature.</p></div>
+        <div class="col-card"><h3>Reasoning Layer</h3><p>23 causality modules in a 4-tier hierarchy. 6-stream weighted scoring. 7-category hallucination shield engineered for LDT-grade reliability.</p></div>
+    </div>
+    <div class="col-card" style="margin-top:10px;"><h3>Orchestration Layer</h3><p>16 specialized LangGraph agents compose end-to-end workflows. 118 domain tools operationalize 60+ disease contexts. ~389K Python LOC = 5-engineer-year reproduction barrier.</p></div>
+  `,
+  narration: "BiRAGAS is a three layer platform. The Evidence Layer holds eight point six million curated vectors and thirteen live API integrations. The Reasoning Layer has twenty three causality modules and a seven category hallucination shield. The Orchestration Layer coordinates sixteen specialized agents across more than sixty disease contexts."
+},
+
+/* 7 — Capability bar chart */
+{ eyebrow: "PLATFORM CAPABILITIES", title: "Quantified scale across nine dimensions",
+  subtitle: "BiRAGAS leads every benchmark",
+  layout: "split",
+  bodyLeft: `
+    <table class="tbl">
+        <thead><tr><th>Capability</th><th>Scale</th></tr></thead>
+        <tbody>
+            <tr><td>LangGraph Agents</td><td>16</td></tr>
+            <tr><td>Causal Modules</td><td>23</td></tr>
+            <tr><td>Bio-RAG Vectors</td><td>8.6 M</td></tr>
+            <tr><td>Domain Tools</td><td>118</td></tr>
+            <tr><td>Live APIs</td><td>13</td></tr>
+            <tr><td>Hallucination Categories</td><td>7</td></tr>
+            <tr><td>Disease Contexts</td><td>60+</td></tr>
+            <tr><td>Python LOC (K)</td><td>389</td></tr>
+        </tbody>
+    </table>
+  `,
+  chartTitle: "Platform Capabilities — Normalized Score",
+  chart: {
+    type: 'radar',
+    data: {
+        labels: ['Multi-omic','Causality','Agentic','Lit. Ingest','Shield','LDT Path','Disease Lib','Validation'],
+        datasets: [
+            { label: 'BiRAGAS', data: [95, 98, 96, 95, 100, 92, 90, 85],
+              borderColor: CHART_COLORS.gold, backgroundColor: 'rgba(201,162,39,.25)',
+              pointBackgroundColor: CHART_COLORS.goldSoft, borderWidth: 2 },
+            { label: 'Tempus AI', data: [60, 20, 35, 55, 0, 85, 60, 75],
+              borderColor: CHART_COLORS.teal, backgroundColor: 'rgba(79,195,247,.12)',
+              pointBackgroundColor: CHART_COLORS.teal, borderWidth: 2 },
+            { label: 'Recursion', data: [50, 5, 5, 5, 0, 5, 50, 65],
+              borderColor: CHART_COLORS.purple, backgroundColor: 'rgba(186,104,200,.10)',
+              pointBackgroundColor: CHART_COLORS.purple, borderWidth: 2 }
+        ]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { r: { angleLines: { color: 'rgba(201,162,39,.15)' }, grid: { color: 'rgba(201,162,39,.08)' }, pointLabels: { color: '#E6EAF0', font: { size: 10 } }, ticks: { display: false, max: 100 } } }
+    }
+  },
+  narration: "BiRAGAS leads every capability benchmark. Sixteen agents, twenty three causality modules, eight point six million curated vectors, one hundred eighteen domain tools, thirteen live APIs, a seven category hallucination shield, sixty disease contexts, and approximately three hundred eighty nine thousand lines of code that represent a five engineer year reproduction barrier."
+},
+
+/* 8 — Three properties */
+{ eyebrow: "ARCHITECTURE → REVENUE", title: "Three properties that compound revenue",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Modular causality.</strong> Each of 23 modules sold as a standalone product — many revenue products from one codebase.</li>
+        <li><strong>Disease-context portability.</strong> New vertical needs 3–6 months of context tuning, not platform rebuilding.</li>
+        <li><strong>Buyer-tier price discrimination.</strong> $15K (academic) to $8M (pharma) — 500× spread on the same engine.</li>
+    </ul>
+    <div class="callout"><div class="callout-title">Compounding Effect</div><p>Every new disease context leverages the same engine but unlocks a new buyer set. Unit economics improve with every vertical added.</p></div>
+  `,
+  chartTitle: "Price Tier Spread (USD log scale)",
+  chart: {
+    type: 'bar',
+    data: {
+        labels: ['Academic Reader','Academic Pro','Biotech Mid','Pharma Enterprise','Strategic Co-Dev'],
+        datasets: [{
+            label: 'Max ACV (USD)',
+            data: [30000, 300000, 1200000, 8000000, 20000000],
+            backgroundColor: ['#4FC3F7','#81C784','#E8C76A','#C9A227','#BA68C8'],
+            borderColor: '#0B1F3A', borderWidth: 1
+        }]
+    },
+    options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { type: 'logarithmic', ...baseScaleOpts,
+                 ticks: { color: '#A8B3C5', callback: v => '$'+ (v >= 1e6 ? (v/1e6)+'M' : v >= 1e3 ? (v/1e3)+'K' : v) } },
+            y: baseScaleOpts
+        }
+    }
+  },
+  narration: "Three architectural properties compound BiRAGAS revenue. First, modular causality. Second, disease context portability. Third, buyer tier pricing spans five hundred times from academic to pharma enterprise without changing the core technology."
+},
+
+/* 9 — section */
+{ type: "section", body: `
+    <div class="section-number">03</div>
+    <div class="section-title">AI for Drug Discovery</div>
+    <div class="section-tag">The macro opportunity</div>
+`, narration: "Section three. AI for Drug Discovery. The macro opportunity that BiRAGAS sits inside."
+},
+
+/* 10 — Market growth */
+{ eyebrow: "MARKET", title: "Fastest-growing segment of biopharma R&D",
+  subtitle: "AI drug discovery TAM: $2.9B (2025) → $13.5B (2030) · 30% CAGR",
+  layout: "split",
+  bodyLeft: `
+    <p class="lead">Pharma external AI R&D spend expands from $12B (2025) to $50B (2030).</p>
+    <ul class="bullets">
+        <li><strong>Global TAM</strong>: $2.9B → $13.5B</li>
+        <li><strong>Active partnerships</strong>: 295 → 950</li>
+        <li><strong>Avg license deal</strong>: $38M → $95M</li>
+        <li><strong>Per-program royalty</strong>: 3.0% → 4.0%</li>
+        <li><strong>Candidates in clinic</strong>: 65 → 500</li>
+    </ul>
+  `,
+  chartTitle: "AI Drug Discovery Market Growth",
+  chart: {
+    type: 'line',
+    data: {
+        labels: ['2023','2025','2028','2030'],
+        datasets: [
+            { label: 'Global TAM ($B)', data: [1.9, 2.9, 7.5, 13.5],
+              borderColor: CHART_COLORS.gold, backgroundColor: 'rgba(201,162,39,.18)',
+              tension: 0.35, fill: true, pointRadius: 5, borderWidth: 3 },
+            { label: 'Pharma External AI Spend ($B)', data: [5.5, 12, 30, 50],
+              borderColor: CHART_COLORS.teal, backgroundColor: 'rgba(79,195,247,.10)',
+              tension: 0.35, borderDash: [5,3], pointRadius: 4 }
+        ]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: baseScaleOpts, x: baseScaleOpts } }
+  },
+  narration: "AI for drug discovery is the fastest growing segment of biopharma. The global TAM grows from two point nine billion in twenty twenty five to thirteen point five billion by twenty thirty. Pharma external AI spend grows even faster, from twelve billion to fifty billion dollars across the same window."
+},
+
+/* 11 — Competitive radar */
+{ eyebrow: "COMPETITIVE LANDSCAPE", title: "BiRAGAS versus five named alternatives",
+  layout: "split",
+  bodyLeft: `
+    <table class="tbl">
+        <thead><tr><th>Capability</th><th>BiRAGAS</th><th>Peers</th></tr></thead>
+        <tbody>
+            <tr><td>Multi-omic + ncRNA</td><td style="color:var(--gold)">Yes</td><td>Partial/No</td></tr>
+            <tr><td>Causal Reasoning</td><td style="color:var(--gold)">23 mods</td><td>None</td></tr>
+            <tr><td>Agentic Orch.</td><td style="color:var(--gold)">16 agents</td><td>None</td></tr>
+            <tr><td>Real-time Lit</td><td style="color:var(--gold)">13 APIs</td><td>None</td></tr>
+            <tr><td>Halluc. Shield</td><td style="color:var(--gold)">7-cat</td><td>None</td></tr>
+            <tr><td>LDT Path</td><td style="color:var(--gold)">Yes</td><td>Tempus only</td></tr>
+        </tbody>
+    </table>
+  `,
+  chartTitle: "Capability Score vs Peers (0–100)",
+  chart: {
+    type: 'radar',
+    data: {
+        labels: ['Multi-omic','Causality','Agentic','Lit Ingest','Shield','LDT Path'],
+        datasets: [
+            { label: 'BiRAGAS', data: [95, 98, 96, 95, 100, 92], borderColor: CHART_COLORS.gold, backgroundColor: 'rgba(201,162,39,.30)', borderWidth: 2 },
+            { label: 'Tempus', data: [60, 20, 35, 55, 0, 85], borderColor: CHART_COLORS.teal, backgroundColor: 'rgba(79,195,247,.10)', borderWidth: 2 },
+            { label: 'Recursion', data: [50, 5, 5, 5, 0, 5], borderColor: CHART_COLORS.purple, backgroundColor: 'rgba(186,104,200,.08)', borderWidth: 2 },
+            { label: 'Insilico', data: [10, 5, 5, 35, 0, 5], borderColor: CHART_COLORS.green, backgroundColor: 'rgba(76,175,80,.08)', borderWidth: 2 }
+        ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: { r: { angleLines: { color: 'rgba(201,162,39,.15)' }, grid: { color: 'rgba(201,162,39,.08)' }, pointLabels: { color: '#E6EAF0', font:{size:10} }, ticks: { display: false, max: 100 } } } }
+  },
+  narration: "Benchmarked against Recursion, Insilico, Schrödinger, and Tempus AI, BiRAGAS is the only platform combining integrated multi omic and non coding RNA input, four tier causal reasoning, agentic orchestration, real time literature ingestion, hallucination shielding, and a clear path to laboratory developed tests."
+},
+
+/* 12 — Pricing tiers */
+{ eyebrow: "LICENSING ARCHITECTURE", title: "Five-tier pricing — 500× spread",
+  subtitle: "Same engine, scaled across academic to pharma enterprise",
+  layout: "split",
+  bodyLeft: `
+    <table class="tbl">
+        <thead><tr><th>Tier</th><th>Subscription</th><th>Royalty</th></tr></thead>
+        <tbody>
+            <tr><td>Academic Reader</td><td>$15K–$30K</td><td>—</td></tr>
+            <tr><td>Academic Pro</td><td>$150K–$300K</td><td>—</td></tr>
+            <tr><td>Biotech Mid</td><td>$500K–$1.2M</td><td>1.5–2.5%</td></tr>
+            <tr><td>Pharma Enterprise</td><td>$3.5M–$8M</td><td>2.5–4%</td></tr>
+            <tr><td>Strategic Co-Dev</td><td>Negotiated</td><td>Net split</td></tr>
+        </tbody>
+    </table>
+    <div class="callout"><div class="callout-title">Pricing ladder = sales funnel</div><p>Academic papers de-risk biotech buyers; biotech case studies anchor pharma enterprise discussions.</p></div>
+  `,
+  chartTitle: "Max ACV by Tier (log scale)",
+  chart: {
+    type: 'bar',
+    data: {
+        labels: ['Academic Reader','Academic Pro','Biotech Mid','Pharma Enterprise','Strategic Co-Dev'],
+        datasets: [{ label: 'Max ACV (USD)', data: [30000, 300000, 1200000, 8000000, 20000000],
+                     backgroundColor: ['#4FC3F7','#81C784','#E8C76A','#C9A227','#BA68C8'] }]
+    },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { type: 'logarithmic', ...baseScaleOpts, ticks: { color: '#A8B3C5', callback: v => '$' + (v>=1e6?(v/1e6)+'M':v>=1e3?(v/1e3)+'K':v) } }, y: baseScaleOpts } }
+  },
+  narration: "Five pricing tiers span five hundred times from fifteen thousand dollars at academic reader tier to eight million at pharma enterprise. The same underlying technology is priced differentially through scope, support, and intellectual property rights. The pricing ladder itself serves as the sales funnel."
+},
+
+/* 13 — section */
+{ type: "section", body: `
+    <div class="section-number">04</div>
+    <div class="section-title">Adult AML</div>
+    <div class="section-tag">Vertical I — Flagship oncology</div>
+`, narration: "Section four. Vertical one. Adult acute myeloid leukemia. The BiRAGAS flagship oncology indication."
+},
+
+/* 14 — AML KPI + market growth */
+{ eyebrow: "VERTICAL I — ADULT AML", title: "The disease where BiRAGAS already proved itself",
+  subtitle: "12 of 14 targets had zero PubMed citations at discovery",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">2030 TAM</div><div class="kpi-value">$7.6 B</div></div>
+        <div class="kpi"><div class="kpi-label">US Incidence</div><div class="kpi-value">24,500/yr</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$18.5 M</div></div>
+        <div class="kpi"><div class="kpi-label">5Y OS</div><div class="kpi-value">30%</div></div>
+    </div>
+    <p>AML is mutationally heterogeneous — FLT3, IDH1/2, TP53 — and the novel agent class generates intense competition for predictive biomarkers and companion diagnostics.</p>
+  `,
+  chartTitle: "AML Therapeutics Market — Global ($B)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['2024','2026','2028','2030'],
+            datasets: [{ label: 'Global AML Rx ($B)', data: [3.2, 4.4, 5.9, 7.6],
+                         backgroundColor: 'rgba(201,162,39,.7)', borderColor: CHART_COLORS.gold, borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { ...baseScaleOpts, title: { display: true, text: 'USD billions', color: '#A8B3C5' } }, x: baseScaleOpts } }
+  },
+  narration: "Adult AML is the BiRAGAS flagship oncology vertical. Twelve of fourteen targets identified by the platform had zero PubMed citations at discovery, demonstrating reasoning beyond the published literature horizon. The market reaches seven point six billion dollars by twenty thirty, with five year overall survival still only thirty percent — a major unmet need."
+},
+
+/* 15 — AML revenue pie */
+{ eyebrow: "VERTICAL I — ADULT AML", title: "Four revenue streams · $18.5M Y5",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Stratification LDT — $8.5M</strong>. $1,800/test · 45K tests/yr</li>
+        <li><strong>Companion Dx — $5.0M</strong>. FLT3/IDH/menin partnerships</li>
+        <li><strong>Target Discovery — $3.0M</strong>. $250K/target validation</li>
+        <li><strong>MRD Monitoring — $2.0M</strong>. Longitudinal ncRNA subscription</li>
+    </ul>
+    <div class="callout"><div class="callout-title">Strategic position</div><p>BiRAGAS does not compete with cytogenetics or NGS — it integrates them and adds the ncRNA + causal layer.</p></div>
+  `,
+  chartTitle: "AML Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['Stratification LDT','Companion Dx','Target Discovery','MRD Monitoring'],
+            datasets: [{ data: [8.5, 5.0, 3.0, 2.0], backgroundColor: palette.slice(0,4), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "Adult AML supports four BiRAGAS revenue streams. The stratification LDT delivers eight and a half million by year five. Companion diagnostics adds five million through pharma co development. Target discovery service contributes three million. Longitudinal MRD monitoring adds two million in recurring subscription revenue."
+},
+
+/* 16 — section */
+{ type: "section", body: `
+    <div class="section-number">05</div>
+    <div class="section-title">Diabetic Nephropathy</div>
+    <div class="section-tag">Vertical II — High-volume LDT</div>
+`, narration: "Section five. Vertical two. Diabetic nephropathy. The high volume laboratory developed test opportunity."
+},
+
+/* 17 — DKD KPIs + dual bar */
+{ eyebrow: "VERTICAL II — DKD", title: "Single largest cause of end-stage renal disease",
+  subtitle: "44% of US ESRD cases are diabetes-attributable",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">2030 TAM</div><div class="kpi-value">$8.4 B</div></div>
+        <div class="kpi"><div class="kpi-label">Diabetes Global</div><div class="kpi-value">643 M</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$22.0 M</div></div>
+        <div class="kpi"><div class="kpi-label">T2D → CKD</div><div class="kpi-value">40%</div></div>
+    </div>
+    <p>SGLT2i + finerenone uptake is under 25% of eligible patients because clinicians cannot reliably identify rapid progressors. 1.2M screens/yr addressable in US alone.</p>
+  `,
+  chartTitle: "DKD Market & Diabetes Prevalence",
+  chart: {
+    type: 'bar',
+    data: { labels: ['2024','2026','2028','2030'],
+            datasets: [
+                { label: 'DKD Rx ($B)', data: [3.5, 4.8, 6.5, 8.4], backgroundColor: 'rgba(201,162,39,.7)', yAxisID: 'y' },
+                { label: 'Diabetes Global (M)', data: [537, 575, 612, 643], backgroundColor: 'rgba(79,195,247,.7)', yAxisID: 'y1' }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: { y: { ...baseScaleOpts, position: 'left', title: { display: true, text: 'DKD Rx ($B)', color: '#A8B3C5' } },
+                y1: { ...baseScaleOpts, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Diabetes (M pts)', color: '#A8B3C5' } },
+                x: baseScaleOpts } }
+  },
+  narration: "Diabetic kidney disease is the single largest cause of end stage renal disease in developed countries. The market reaches eight point four billion by twenty thirty. The unmet need is stratification: SGLT2 inhibitor and finerenone uptake remains below twenty five percent of eligible patients."
+},
+
+/* 18 — DKD revenue pie */
+{ eyebrow: "VERTICAL II — DKD", title: "Four streams · cost-benefit beats 16:1",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Progression Risk LDT — $11.0M</strong>. $650/test · 1.2M screens/yr</li>
+        <li><strong>Pharma Stratification — $6.0M</strong>. SGLT2i + finerenone</li>
+        <li><strong>Population Health — $3.0M</strong>. PMPM risk score · payers</li>
+        <li><strong>Drug Repurposing — $2.0M</strong>. Causal-engine candidates</li>
+    </ul>
+    <div class="callout"><div class="callout-title">Cost-benefit math</div><p>Medicare spends $108,000/yr per ESRD patient. A $650 test that prevents even 1% of progressions delivers a 16:1 cost-benefit ratio.</p></div>
+  `,
+  chartTitle: "DKD Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['Risk LDT','Pharma Strat.','Pop Health','Repurposing'],
+            datasets: [{ data: [11.0, 6.0, 3.0, 2.0], backgroundColor: palette.slice(0,4), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "DKD generates four streams. The progression risk LDT delivers eleven million by year five. The cost benefit math is overwhelming: Medicare spends one hundred eight thousand per ESRD patient annually, so a six hundred fifty dollar test preventing even one percent of progressions delivers a sixteen to one return."
+},
+
+/* 19 — section */
+{ type: "section", body: `
+    <div class="section-number">06</div>
+    <div class="section-title">Wound Care & AMR</div>
+    <div class="section-tag">Vertical III — Largest absolute dollars</div>
+`, narration: "Section six. Vertical three. Wound care and antimicrobial resistance. The largest absolute dollar opportunity in the BiRAGAS portfolio."
+},
+
+/* 20 — Wound KPIs + dual axis */
+{ eyebrow: "VERTICAL III — WOUND CARE + AMR", title: "The twin crisis nobody addresses jointly",
+  subtitle: "6.5M chronic wounds · 1.27M annual AMR deaths",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">Wound 2030</div><div class="kpi-value">$41.8 B</div></div>
+        <div class="kpi"><div class="kpi-label">US Wounds</div><div class="kpi-value">6.5 M</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$35.0 M</div></div>
+        <div class="kpi"><div class="kpi-label">AMR Deaths</div><div class="kpi-value">1.27 M/yr</div></div>
+    </div>
+    <p>DFUs are the convergence: 55%+ colonized with resistant organisms, conventional culture misses polymicrobial complexity. BiRAGAS host-microbiome causal analysis is unique.</p>
+  `,
+  chartTitle: "Wound Care Market & AMR Mortality",
+  chart: {
+    type: 'line',
+    data: { labels: ['2024','2026','2028','2030','2040','2050'],
+            datasets: [
+                { label: 'Wound Care Mkt ($B)', data: [24.5, 28.5, 34, 41.8, 65, 90], borderColor: CHART_COLORS.gold, backgroundColor: 'rgba(201,162,39,.15)', tension: 0.3, fill: true, yAxisID: 'y' },
+                { label: 'AMR Deaths Global (M/yr)', data: [1.27, 1.5, 1.85, 2.5, 5.5, 10], borderColor: CHART_COLORS.red, backgroundColor: 'transparent', tension: 0.3, borderDash: [5,3], yAxisID: 'y1' }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: { y: { ...baseScaleOpts, position: 'left', title: { display: true, text: '$B', color: '#A8B3C5' } },
+                y1: { ...baseScaleOpts, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'M deaths', color: '#A8B3C5' } },
+                x: baseScaleOpts } }
+  },
+  narration: "Wound care plus antimicrobial resistance is the largest absolute dollar opportunity in the BiRAGAS portfolio. Six and a half million Americans have chronic non healing wounds. Antimicrobial resistance already kills one point two seven million globally per year, projected to ten million annually by twenty fifty. BiRAGAS is unique in integrating wound biology and pathogen resistance."
+},
+
+/* 21 — Wound revenue pie */
+{ eyebrow: "VERTICAL III — WOUND CARE + AMR", title: "Five streams · $35M Y5 — largest single vertical",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Non-Healing Wound LDT — $14.5M</strong>. $850/test · 800K/yr</li>
+        <li><strong>AMR Stewardship Decision — $6.0M</strong>. 250 hospital subscriptions</li>
+        <li><strong>Pharma AMR Partnership — $6.5M</strong>. Novel antimicrobials co-discovery</li>
+        <li><strong>Wound Microbiome Sub — $3.0M</strong>. Specialty clinics</li>
+        <li><strong>Repurposing Royalties — $5.0M</strong>. AMR adjuvants</li>
+    </ul>
+  `,
+  chartTitle: "Wound + AMR Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['LDT','Stewardship','Pharma AMR','Microbiome Sub','Repurposing'],
+            datasets: [{ data: [14.5, 6.0, 6.5, 3.0, 5.0], backgroundColor: palette.slice(0,5), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "Wound care and AMR generate five streams totaling thirty five million by year five. The non healing wound LDT alone reaches fourteen and a half million. Hospital AMR stewardship subscription contributes six million. Pharma AMR co discovery, microbiome subscription, and repurposing royalties round out the portfolio."
+},
+
+/* 22 — section */
+{ type: "section", body: `
+    <div class="section-number">07</div>
+    <div class="section-title">Pancreatic Cancer</div>
+    <div class="section-tag">Vertical IV — Deadliest solid tumor</div>
+`, narration: "Section seven. Vertical four. Pancreatic cancer. The deadliest of the top ten solid tumors."
+},
+
+/* 23 — PDAC KPIs + market */
+{ eyebrow: "VERTICAL IV — PDAC", title: "Diagnostic problem first, therapeutic second",
+  subtitle: "85% present with locally advanced or metastatic disease",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">2030 TAM</div><div class="kpi-value">$6.5 B</div></div>
+        <div class="kpi"><div class="kpi-label">US Incidence</div><div class="kpi-value">66,440</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$16.0 M</div></div>
+        <div class="kpi"><div class="kpi-label">5Y OS</div><div class="kpi-value">12%</div></div>
+    </div>
+    <p>Three openings: ncRNA early detection (BRCA, Lynch, new-onset DM), KRAS G12C/G12D resistance stratification, neoadjuvant response prediction.</p>
+  `,
+  chartTitle: "PDAC Market & Adjacent Dx TAMs ($B)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['Pancreatic Rx','KRAS Inhibitor','ctDNA Pancreatic Dx'],
+            datasets: [
+                { label: '2024', data: [2.6, 0.3, 0.1], backgroundColor: 'rgba(79,195,247,.7)' },
+                { label: '2030E', data: [6.5, 3.2, 1.5], backgroundColor: 'rgba(201,162,39,.85)' }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: { y: { ...baseScaleOpts, title: { display: true, text: 'USD billions', color: '#A8B3C5' } }, x: baseScaleOpts } }
+  },
+  narration: "Pancreatic cancer remains the deadliest of the top ten solid tumors with twelve percent five year survival. Eighty five percent of patients present at locally advanced or metastatic stage. BiRAGAS addresses three openings: early detection in high risk populations, KRAS resistance stratification, and neoadjuvant response prediction."
+},
+
+/* 24 — PDAC revenue pie */
+{ eyebrow: "VERTICAL IV — PDAC", title: "Four revenue streams · $16M Y5",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Early Detection ncRNA — $6.5M</strong>. $950/test · ~2.5M high-risk US pts</li>
+        <li><strong>KRAS Resistance CDx — $4.0M</strong>. G12C/G12D companion Dx</li>
+        <li><strong>Target Discovery — $2.5M</strong>. Stroma + immune microenvironment</li>
+        <li><strong>Neoadjuvant Predictor — $3.0M</strong>. Pre-FOLFIRINOX</li>
+    </ul>
+  `,
+  chartTitle: "PDAC Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['Early Detection','KRAS CDx','Target Discovery','Neoadj. Predictor'],
+            datasets: [{ data: [6.5, 4.0, 2.5, 3.0], backgroundColor: palette.slice(0,4), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "Pancreatic cancer delivers four streams totaling sixteen million by year five. Early detection panel for high risk patients leads at six and a half million. KRAS resistance companion diagnostic, microenvironment target discovery, and neoadjuvant response prediction complete the portfolio."
+},
+
+/* 25 — section */
+{ type: "section", body: `
+    <div class="section-number">08</div>
+    <div class="section-title">Melanoma</div>
+    <div class="section-tag">Vertical V — IO stratification frontier</div>
+`, narration: "Section eight. Vertical five. Melanoma. The proving ground for modern immuno oncology."
+},
+
+/* 26 — Melanoma KPIs + market */
+{ eyebrow: "VERTICAL V — MELANOMA", title: "Largest stratification need in oncology",
+  subtitle: "55% of metastatic patients don't respond to anti-PD-1 monotherapy",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">2030 TAM</div><div class="kpi-value">$19.3 B</div></div>
+        <div class="kpi"><div class="kpi-label">US Incidence</div><div class="kpi-value">100,640</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$19.5 M</div></div>
+        <div class="kpi"><div class="kpi-label">IO NR</div><div class="kpi-value">55%</div></div>
+    </div>
+    <p>Combo IO averages $265K/pt/yr. A non-responder predictor would save the US healthcare system billions while accelerating responders to combination therapy.</p>
+  `,
+  chartTitle: "Melanoma Rx Market & Neoantigen TAM ($B)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['2024','2026','2028','2030'],
+            datasets: [
+                { label: 'Melanoma Rx ($B)', data: [10.2, 13.0, 16.0, 19.3], backgroundColor: 'rgba(201,162,39,.7)' },
+                { label: 'Neoantigen Vaccine TAM ($B)', data: [0.1, 0.5, 1.5, 2.8], backgroundColor: 'rgba(186,104,200,.85)' }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: baseScaleOpts, x: baseScaleOpts } }
+  },
+  narration: "Melanoma was the proving ground for modern immuno oncology. Fifty five percent of metastatic patients do not respond to anti PD one monotherapy. Combination IO therapy averages two hundred sixty five thousand dollars per patient per year. A pre treatment non responder predictor would save the US healthcare system several billion dollars annually."
+},
+
+/* 27 — Melanoma revenue pie */
+{ eyebrow: "VERTICAL V — MELANOMA", title: "Four revenue streams · $19.5M Y5",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>IO Response Predictor LDT — $8.5M</strong>. $1,200/test · 90K/yr</li>
+        <li><strong>Neoantigen Discovery — $5.5M</strong>. Per-pt panel · vaccine programs</li>
+        <li><strong>IO Sequencing CDx — $3.5M</strong>. PD-1/CTLA-4/LAG-3/TIGIT</li>
+        <li><strong>Pharma IO Partnership — $2.0M</strong>. Resistance targets</li>
+    </ul>
+  `,
+  chartTitle: "Melanoma Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['IO Predictor LDT','Neoantigen','IO Sequencing CDx','Pharma IO'],
+            datasets: [{ data: [8.5, 5.5, 3.5, 2.0], backgroundColor: palette.slice(0,4), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "Melanoma generates four streams totaling nineteen and a half million by year five. The IO response predictor LDT leads at eight and a half million. Neoantigen discovery service, IO combination sequencing CDx, and pharma IO partnership add the remainder."
+},
+
+/* 28 — section */
+{ type: "section", body: `
+    <div class="section-number">09</div>
+    <div class="section-title">Wellness & Longevity</div>
+    <div class="section-tag">Vertical VI — Largest market BiRAGAS touches</div>
+`, narration: "Section nine. Vertical six. Wellness and longevity. The single largest market BiRAGAS touches."
+},
+
+/* 29 — Wellness KPIs + market */
+{ eyebrow: "VERTICAL VI — WELLNESS", title: "An $8.5 trillion economy by 2030",
+  subtitle: "Personalized wellness sub-segment growing at 13% CAGR",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">Wellness 2030</div><div class="kpi-value">$8.5 T</div></div>
+        <div class="kpi"><div class="kpi-label">Longevity 2030</div><div class="kpi-value">$63 B</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$42.0 M</div></div>
+        <div class="kpi"><div class="kpi-label">Personalized</div><div class="kpi-value">$450 B</div></div>
+    </div>
+    <p>BiRAGAS takes a precision-medicine slice through subscription, white-label, and concierge channels. Even 0.5% of personalized wellness exceeds $2B addressable.</p>
+  `,
+  chartTitle: "Wellness Economy Sub-Segments 2024 → 2030 ($B)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['Personalized','Longevity','Consumer Biomarker','Functional Med','Wearable+Bio'],
+            datasets: [
+                { label: '2024', data: [220, 27, 5.4, 8, 12], backgroundColor: 'rgba(79,195,247,.7)' },
+                { label: '2030E', data: [450, 63, 14, 21, 35], backgroundColor: 'rgba(201,162,39,.85)' }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: baseScaleOpts, x: baseScaleOpts } }
+  },
+  narration: "The global wellness economy is the largest market BiRAGAS addresses, growing from five point six trillion in twenty twenty four to eight and a half trillion by twenty thirty. Personalized wellness, the addressable sub segment, reaches four hundred fifty billion. Even a half percent share of personalized wellness exceeds two billion dollars in annual revenue."
+},
+
+/* 30 — Wellness revenue */
+{ eyebrow: "VERTICAL VI — WELLNESS", title: "Four channels · $42M Y5",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>DTC Subscription — $22.0M</strong>. $199/mo · 9,200 subs by Y5</li>
+        <li><strong>Longevity Clinic White-Label — $11.0M</strong>. 250 clinics</li>
+        <li><strong>Wellness Brand API/SaaS — $5.0M</strong>. Embedded analytics</li>
+        <li><strong>HNW Concierge — $4.0M</strong>. $50K/yr premium</li>
+    </ul>
+  `,
+  chartTitle: "Wellness Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['DTC Subscription','Clinic White-Label','Brand API','HNW Concierge'],
+            datasets: [{ data: [22.0, 11.0, 5.0, 4.0], backgroundColor: palette.slice(0,4), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "Wellness contributes forty two million by year five through four channels. The direct to consumer subscription leads at twenty two million. Longevity clinic white label, wellness brand API, and ultra high net worth concierge programs complete the wellness portfolio."
+},
+
+/* 31 — section */
+{ type: "section", body: `
+    <div class="section-number">10</div>
+    <div class="section-title">Autoimmune Disease</div>
+    <div class="section-tag">Vertical VII — Largest single Y5 vertical</div>
+`, narration: "Section ten. Vertical seven. Autoimmune disease. The largest single vertical in BiRAGAS year five revenue."
+},
+
+/* 32 — Autoimmune KPIs + market */
+{ eyebrow: "VERTICAL VII — AUTOIMMUNE", title: "$30B/yr biologic waste — BiRAGAS attacks it directly",
+  subtitle: "40% of biologic-treated patients do not respond",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">2030 TAM</div><div class="kpi-value">$235 B</div></div>
+        <div class="kpi"><div class="kpi-label">US Patients</div><div class="kpi-value">60 M</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$48.0 M</div></div>
+        <div class="kpi"><div class="kpi-label">Non-Responders</div><div class="kpi-value">40%</div></div>
+    </div>
+    <p>At $68K/pt/yr, failed-trial waste exceeds $30B/yr in US alone. Combined with repurposing and post-COVID lines, autoimmune is the single largest Y5 vertical.</p>
+  `,
+  chartTitle: "Autoimmune Market — Global ($B)",
+  chart: {
+    type: 'line',
+    data: { labels: ['2024','2026','2028','2030'],
+            datasets: [{ label: 'Autoimmune Rx ($B)', data: [145, 175, 205, 235],
+                         borderColor: CHART_COLORS.gold, backgroundColor: 'rgba(201,162,39,.18)', tension: 0.35, fill: true,
+                         pointRadius: 5, borderWidth: 3 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { ...baseScaleOpts, title: { display: true, text: 'USD billions', color: '#A8B3C5' } }, x: baseScaleOpts } }
+  },
+  narration: "Autoimmune disease is the largest pharmaceutical market BiRAGAS directly addresses at one hundred forty five billion dollars globally in twenty twenty four, growing to two hundred thirty five billion by twenty thirty. Forty percent of biologic treated patients do not respond. At sixty eight thousand dollars per patient per year, failed trial waste exceeds thirty billion dollars annually in the US alone."
+},
+
+/* 33 — Autoimmune sub-segments bar */
+{ eyebrow: "VERTICAL VII — AUTOIMMUNE", title: "Seven sub-indications · $48M Y5",
+  layout: "split",
+  bodyLeft: `
+    <p class="lead">Five BiRAGAS revenue streams across this vertical: biologic responder LDT, pharma stratification, drug repurposing, post-COVID LDT, and RWE licensing.</p>
+    <ul class="bullets">
+        <li><strong>Biologic Responder LDT — $18.0M</strong>. $1,400/test · 250K/yr</li>
+        <li><strong>Pharma Stratification — $12.0M</strong></li>
+        <li><strong>Drug Repurposing Royalties — $8.0M</strong></li>
+        <li><strong>Post-COVID Autoimmune LDT — $6.0M</strong></li>
+        <li><strong>RWE License — $4.0M</strong></li>
+    </ul>
+  `,
+  chartTitle: "Autoimmune Sub-Segments 2024 → 2030 ($B)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['RA','IBD','PsO/PsA','Lupus','MS','Post-COVID','Other'],
+            datasets: [
+                { label: '2024', data: [29, 22, 27, 5, 28, 2, 32], backgroundColor: 'rgba(79,195,247,.7)' },
+                { label: '2030E', data: [44, 38, 44, 14, 35, 18, 42], backgroundColor: 'rgba(201,162,39,.85)' }
+            ] },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      scales: { x: { ...baseScaleOpts, title: { display: true, text: 'USD billions', color: '#A8B3C5' } }, y: baseScaleOpts } }
+  },
+  narration: "Autoimmune spans seven sub indications. Rheumatoid arthritis, inflammatory bowel disease, and psoriatic disease anchor the established market. Lupus and post COVID autoimmune are the fastest growing segments. BiRAGAS deploys five revenue streams totaling forty eight million by year five."
+},
+
+/* 34 — section */
+{ type: "section", body: `
+    <div class="section-number">11</div>
+    <div class="section-title">Alzheimer & Neuro</div>
+    <div class="section-tag">Vertical VIII — The amyloid inflection</div>
+`, narration: "Section eleven. Vertical eight. Alzheimer disease and neurodegeneration. The amyloid inflection has created the largest near term diagnostic opportunity in any therapeutic area."
+},
+
+/* 35 — Alzheimer KPIs + PET wave */
+{ eyebrow: "VERTICAL VIII — ALZHEIMER", title: "Lecanemab + donanemab created an unprecedented Dx wave",
+  subtitle: "Amyloid PET confirmations: 290K (2024) → 1.1M (2030) — nearly 4×",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">AD 2030 TAM</div><div class="kpi-value">$18.4 B</div></div>
+        <div class="kpi"><div class="kpi-label">US AD Pts</div><div class="kpi-value">8.5 M</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$31.0 M</div></div>
+        <div class="kpi"><div class="kpi-label">Blood Biomarker</div><div class="kpi-value">$7.5 B</div></div>
+    </div>
+    <p>BiRAGAS's ncRNA progression panel slots adjacent to blood-based biomarkers, predicting which amyloid-positive patients progress fastest.</p>
+  `,
+  chartTitle: "Amyloid PET Confirmations (US/yr)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['2024','2026','2028','2030'],
+            datasets: [{ label: 'PET Confirmations', data: [290000, 525000, 800000, 1100000],
+                         backgroundColor: ['#4FC3F7','#81C784','#E8C76A','#C9A227'] }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { y: { ...baseScaleOpts, title: { display: true, text: 'PET confirmations/yr', color: '#A8B3C5' }, ticks: { color: '#A8B3C5', callback: v => v >= 1e6 ? (v/1e6)+'M' : (v/1e3)+'K' } }, x: baseScaleOpts } }
+  },
+  narration: "Alzheimer disease has been transformed by the twenty twenty three and twenty twenty four approvals of lecanemab and donanemab. Amyloid PET confirmations nearly quadruple from two hundred ninety thousand annually to over one point one million by twenty thirty. The blood biomarker market expands from eight hundred million to seven and a half billion dollars."
+},
+
+/* 36 — Alzheimer revenue */
+{ eyebrow: "VERTICAL VIII — ALZHEIMER", title: "Five revenue streams · $31M Y5",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Progression Risk ncRNA — $12.0M</strong>. $700/test · 280K/yr</li>
+        <li><strong>Trial Enrichment — $8.5M</strong>. CRO/pharma</li>
+        <li><strong>Anti-Amyloid Stratification CDx — $4.5M</strong></li>
+        <li><strong>Non-Amyloid Target Discovery — $4.0M</strong></li>
+        <li><strong>Pre-Symptomatic Risk Panel — $2.0M</strong></li>
+    </ul>
+  `,
+  chartTitle: "Alzheimer Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['ncRNA Progression','Trial Enrichment','Anti-Amyloid CDx','Target Discovery','Pre-Sympt.'],
+            datasets: [{ data: [12.0, 8.5, 4.5, 4.0, 2.0], backgroundColor: palette.slice(0,5), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "Alzheimer and neurodegeneration generate five streams totaling thirty one million by year five. The non coding RNA progression panel leads at twelve million. Trial enrichment, non amyloid target discovery, anti amyloid responder stratification, and pre symptomatic risk testing complete the portfolio."
+},
+
+/* 37 — section */
+{ type: "section", body: `
+    <div class="section-number">12</div>
+    <div class="section-title">Agentic AI</div>
+    <div class="section-tag">Vertical IX — Cross-vertical platform</div>
+`, narration: "Section twelve. Vertical nine. Agentic AI. The cross vertical enterprise platform opportunity beyond biology."
+},
+
+/* 38 — Agentic AI KPIs + growth */
+{ eyebrow: "VERTICAL IX — AGENTIC AI", title: "Fastest-growing tech segment of the decade",
+  subtitle: "50% CAGR · $85B by 2030 · Causal-AI sub at 55% CAGR",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">Agentic 2030</div><div class="kpi-value">$85 B</div></div>
+        <div class="kpi"><div class="kpi-label">Causal-AI 2030</div><div class="kpi-value">$8.5 B</div></div>
+        <div class="kpi"><div class="kpi-label">5Y Revenue</div><div class="kpi-value">$27.0 M</div></div>
+        <div class="kpi"><div class="kpi-label">CAGR</div><div class="kpi-value">50%+</div></div>
+    </div>
+    <p>BiRAGAS's 16-agent orchestration, 23-module causality, and 7-category hallucination shield are exactly the technology blocks this market is paying for.</p>
+  `,
+  chartTitle: "Agentic AI & Sub-Segments — Growth ($B)",
+  chart: {
+    type: 'line',
+    data: { labels: ['2024','2026','2028','2030'],
+            datasets: [
+                { label: 'Agentic AI', data: [7.5, 20, 50, 85], borderColor: CHART_COLORS.gold, backgroundColor: 'rgba(201,162,39,.15)', tension: 0.35, fill: true, borderWidth: 3, pointRadius: 5 },
+                { label: 'Causal-AI', data: [0.6, 2.0, 5.0, 8.5], borderColor: CHART_COLORS.teal, backgroundColor: 'transparent', tension: 0.35, borderDash: [5,3] },
+                { label: 'Hallucination Tools', data: [0.3, 1.5, 4.0, 6.0], borderColor: CHART_COLORS.purple, backgroundColor: 'transparent', tension: 0.35, borderDash: [5,3] }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: baseScaleOpts, x: baseScaleOpts } }
+  },
+  narration: "Agentic AI is the single fastest growing technology segment of the next decade, growing from seven and a half billion in twenty twenty four to eighty five billion by twenty thirty. The causal AI sub segment grows at fifty five percent annually. The hallucination mitigation sub segment grows at sixty four percent annually."
+},
+
+/* 39 — Agentic revenue */
+{ eyebrow: "VERTICAL IX — AGENTIC AI", title: "Five revenue streams · $27M Y5",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Pharma Enterprise License — $14.0M</strong>. $3.5–8M ACV · 5 top-50 pharma</li>
+        <li><strong>Hallucination Shield — $5.0M</strong>. Cross-vertical licensing</li>
+        <li><strong>Causality Module — $4.0M</strong>. Finance/insurance/supply chain</li>
+        <li><strong>Architecture Consulting — $2.5M</strong>. $200–400/hr</li>
+        <li><strong>API/SaaS — $1.5M</strong>. Token-based pricing</li>
+    </ul>
+  `,
+  chartTitle: "Agentic AI Y5 Revenue Mix ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['Pharma License','Hallucination Shield','Causality Modules','Consulting','API/SaaS'],
+            datasets: [{ data: [14.0, 5.0, 4.0, 2.5, 1.5], backgroundColor: palette.slice(0,5), borderColor: '#0B1F3A', borderWidth: 2 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } } }
+  },
+  narration: "Agentic AI generates twenty seven million by year five across five streams. The pharma enterprise platform license leads at fourteen million. Hallucination shield, causality module, consulting, and API access stream the remainder."
+},
+
+/* 40 — section */
+{ type: "section", body: `
+    <div class="section-number">13</div>
+    <div class="section-title">Patient Stratification</div>
+    <div class="section-tag">The cross-cutting revenue multiplier</div>
+`, narration: "Section thirteen. Patient stratification. The cross cutting revenue multiplier that turns one engine into three buyer types within every disease."
+},
+
+/* 41 — Stratification donut */
+{ eyebrow: "CROSS-CUTTING ENGINE", title: "One engine · three structurally different revenue forms",
+  subtitle: "$142M Y5 cumulative across the 8 disease verticals",
+  layout: "split",
+  bodyLeft: `
+    <table class="tbl">
+        <thead><tr><th>Form</th><th>Buyer</th><th>Y5 ($M)</th></tr></thead>
+        <tbody>
+            <tr><td>Pharma Strat. Fee</td><td>R&D · per program</td><td>55</td></tr>
+            <tr><td>LDT Diagnostic Revenue</td><td>Labs / payers</td><td>62</td></tr>
+            <tr><td>Companion Dx Royalty</td><td>Pharma commercial</td><td>25</td></tr>
+            <tr class="highlight"><td>TOTAL</td><td>—</td><td>142</td></tr>
+        </tbody>
+    </table>
+    <div class="callout"><div class="callout-title">Why BiRAGAS wins reimbursement</div><p>Clinical utility + analytic validity + audit-grade evidence trail. The 7-category hallucination shield is the third leg — no peer satisfies all three.</p></div>
+  `,
+  chartTitle: "Stratification Revenue by Form (Y5, $M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['LDT Diagnostic ($62M)','Pharma Stratification ($55M)','CDx Royalty ($25M)'],
+            datasets: [{ data: [62, 55, 25], backgroundColor: [CHART_COLORS.gold, CHART_COLORS.teal, CHART_COLORS.green], borderColor: '#0B1F3A', borderWidth: 3 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:11}} } },
+               cutout: '55%' }
+  },
+  narration: "Patient stratification is the cross cutting revenue multiplier. The same BiRAGAS causal engine monetizes three structurally different ways within each disease. Across eight disease verticals, stratification alone delivers one hundred forty two million in year five revenue."
+},
+
+/* 42 — section */
+{ type: "section", body: `
+    <div class="section-number">14</div>
+    <div class="section-title">Revenue Model</div>
+    <div class="section-tag">Five streams · one engine</div>
+`, narration: "Section fourteen. The revenue model. Five complementary streams, one underlying engine."
+},
+
+/* 43 — Revenue synthesis donut */
+{ eyebrow: "REVENUE SYNTHESIS", title: "Five streams · ~78% blended GM",
+  subtitle: "No single stream exceeds 35% of Y5 mix",
+  layout: "split",
+  bodyLeft: `
+    <table class="tbl">
+        <thead><tr><th>Stream</th><th>GM%</th><th>Y5 ($M)</th></tr></thead>
+        <tbody>
+            <tr><td>SaaS Licensing</td><td>88%</td><td>52</td></tr>
+            <tr><td>LDT Diagnostic</td><td>67%</td><td>95</td></tr>
+            <tr><td>Pharma Co-Discovery</td><td>78%</td><td>75</td></tr>
+            <tr><td>Royalties</td><td>95%</td><td>18</td></tr>
+            <tr><td>Consumer/Wellness</td><td>72%</td><td>30</td></tr>
+            <tr class="highlight"><td>TOTAL</td><td>78% (blended)</td><td>270</td></tr>
+        </tbody>
+    </table>
+  `,
+  chartTitle: "Y5 Revenue by Stream ($M)",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['LDT Diagnostic ($95M · 35%)','Pharma Co-Disc ($75M · 28%)','SaaS Licensing ($52M · 19%)','Consumer ($30M · 11%)','Royalties ($18M · 7%)'],
+            datasets: [{ data: [95, 75, 52, 30, 18], backgroundColor: palette.slice(0,5), borderColor: '#0B1F3A', borderWidth: 3 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:10}} } }, cutout: '55%' }
+  },
+  narration: "Five revenue streams compose the BiRAGAS business model. SaaS licensing at eighty eight percent margin. LDT diagnostics at sixty seven percent. Pharma co discovery at seventy eight percent. Royalties at ninety five percent. Consumer wellness at seventy two percent. Blended gross margin is approximately seventy eight percent. No single stream exceeds thirty five percent of mix, de risking the model."
+},
+
+/* 44 — 5Y projection stacked */
+{ eyebrow: "5-YEAR PROJECTION", title: "$9.4M → $287M ARR over 5 years",
+  subtitle: "Base case · USD millions · cumulative across 10 verticals",
+  layout: "full-chart",
+  chartTitle: "5-Year Revenue by Vertical — Stacked ($M)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['Y1','Y2','Y3','Y4','Y5'],
+            datasets: [
+                { label: 'Autoimmune', data: [1.2, 6.0, 14.5, 30.0, 48.0], backgroundColor: '#C9A227' },
+                { label: 'Wellness', data: [0.5, 4.5, 14.0, 28.0, 42.0], backgroundColor: '#4FC3F7' },
+                { label: 'Wound+AMR', data: [1.0, 5.0, 13.0, 24.0, 35.0], backgroundColor: '#81C784' },
+                { label: 'Alzheimer', data: [1.2, 5.5, 13.5, 22.0, 31.0], backgroundColor: '#BA68C8' },
+                { label: 'AI Drug Disc', data: [0.8, 3.0, 8.0, 15.0, 28.0], backgroundColor: '#E8C76A' },
+                { label: 'Agentic AI', data: [0.8, 4.0, 12.0, 19.0, 27.0], backgroundColor: '#4CAF50' },
+                { label: 'DKD', data: [1.2, 5.0, 10.0, 16.0, 22.0], backgroundColor: '#E57373' },
+                { label: 'Melanoma', data: [1.1, 4.5, 9.5, 14.5, 19.5], backgroundColor: '#14305B' },
+                { label: 'AML', data: [1.0, 4.0, 9.0, 14.0, 18.5], backgroundColor: '#A8B3C5' },
+                { label: 'Pancreatic', data: [0.6, 2.5, 5.5, 11.0, 16.0], backgroundColor: '#8A6D3B' }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'right', labels: { font:{size:10}, boxWidth: 12 } },
+                 tooltip: { callbacks: { footer: items => 'Total: $' + items.reduce((s,i)=>s+i.parsed.y,0).toFixed(1) + 'M' } } },
+      scales: { x: { ...baseScaleOpts, stacked: true }, y: { ...baseScaleOpts, stacked: true, title: { display: true, text: 'Revenue ($M)', color: '#A8B3C5' } } } }
+  },
+  narration: "The five year revenue projection consolidates across all ten verticals. Year one revenue of nine point four million is consistent with the SAFE round bridge plan. The four million ARR Series A trigger lands in mid year two. Year five ARR of two hundred eighty seven million sits within comparable company envelope, supporting valuation triangulation."
+},
+
+/* 45 — section */
+{ type: "section", body: `
+    <div class="section-number">15</div>
+    <div class="section-title">Strategy</div>
+    <div class="section-tag">Sequencing · capital · partnerships</div>
+`, narration: "Section fifteen. Strategy. Vertical sequencing, capital allocation, and partnership architecture."
+},
+
+/* 46 — Sequencing bar */
+{ eyebrow: "STRATEGIC RECOMMENDATIONS", title: "Vertical sequencing priorities",
+  layout: "split",
+  bodyLeft: `
+    <ul class="bullets">
+        <li><strong>Lead with Autoimmune + Wound Care.</strong> Combined: $83M of $287M Y5. CMS reimbursement in place.</li>
+        <li><strong>Anchor pharma deals in AML + DKD.</strong> 12-of-14 zero-PubMed AML targets is the strongest pharma BD narrative.</li>
+        <li><strong>Build wellness DTC in Y2.</strong> Highest revenue multiple · brand effect.</li>
+        <li><strong>Defer Alzheimer + Melanoma to Y2–3.</strong> Longer regulatory cycles.</li>
+    </ul>
+  `,
+  chartTitle: "Y5 Revenue Contribution by Vertical ($M)",
+  chart: {
+    type: 'bar',
+    data: { labels: ['Autoimmune','Wellness','Wound+AMR','Alzheimer','AI Drug Disc','Agentic','DKD','Melanoma','AML','Pancreatic'],
+            datasets: [{ label: 'Y5 Revenue ($M)', data: [48, 42, 35, 31, 28, 27, 22, 19.5, 18.5, 16],
+                         backgroundColor: ['#C9A227','#C9A227','#C9A227','#E8C76A','#E8C76A','#E8C76A','#4FC3F7','#4FC3F7','#4FC3F7','#4FC3F7'] }] },
+    options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+      scales: { x: { ...baseScaleOpts, title: { display: true, text: 'Y5 Revenue ($M)', color: '#A8B3C5' } }, y: baseScaleOpts } }
+  },
+  narration: "Vertical sequencing priorities. Lead with autoimmune plus wound care because combined they deliver eighty three million of the two hundred eighty seven million year five revenue and both have reimbursement frameworks in place. Anchor pharma deals around AML and DKD. Build the wellness direct to consumer engine in year two. Defer Alzheimer and melanoma to years two through three."
+},
+
+/* 47 — Capital allocation donut */
+{ eyebrow: "CAPITAL ALLOCATION", title: "SAFE-round proceeds · recommended allocation",
+  layout: "split",
+  bodyLeft: `
+    <div class="kpi-grid cols-2">
+        <div class="kpi"><div class="kpi-label">Wet-Lab</div><div class="kpi-value">30%</div><div class="kpi-sub">CLIA throughput</div></div>
+        <div class="kpi"><div class="kpi-label">Pharma BD</div><div class="kpi-value">20%</div><div class="kpi-sub">2 senior hires</div></div>
+        <div class="kpi"><div class="kpi-label">Engineering</div><div class="kpi-value">35%</div><div class="kpi-sub">10–12 engineers</div></div>
+        <div class="kpi"><div class="kpi-label">Clinical</div><div class="kpi-value">15%</div><div class="kpi-sub">2 pivotal studies</div></div>
+    </div>
+    <div class="callout"><div class="callout-title">Year 1 Partnerships</div><p>3 pharma anchors (oncology+autoimmune+metabolic) · 2 academic medical center MSAs · 1 consumer/wellness distribution partner.</p></div>
+  `,
+  chartTitle: "SAFE Round Capital Allocation",
+  chart: {
+    type: 'doughnut',
+    data: { labels: ['Engineering (35%)','Wet-Lab CLIA (30%)','Pharma BD (20%)','Clinical Validation (15%)'],
+            datasets: [{ data: [35, 30, 20, 15], backgroundColor: [CHART_COLORS.gold, CHART_COLORS.teal, CHART_COLORS.green, CHART_COLORS.purple], borderColor: '#0B1F3A', borderWidth: 3 }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels:{font:{size:11}} } }, cutout: '55%' }
+  },
+  narration: "Recommended SAFE round capital allocation. Thirty five percent to engineering. Thirty percent to wet lab CLIA expansion. Twenty percent to pharma business development for two senior hires. Fifteen percent to clinical validation studies."
+},
+
+/* 48 — section */
+{ type: "section", body: `
+    <div class="section-number">16</div>
+    <div class="section-title">Exit Landscape</div>
+    <div class="section-tag">Comparables · valuation envelope</div>
+`, narration: "Section sixteen. Exit landscape. Public comparables and valuation envelope."
+},
+
+/* 49 — Comparables scatter */
+{ eyebrow: "VALUATION TRIANGULATION", title: "$3.7B base · $9B bull at Year 5",
+  subtitle: "Peer median 13× revenue · Tempus AI closest analogue",
+  layout: "split",
+  bodyLeft: `
+    <table class="tbl">
+        <thead><tr><th>Company</th><th>EV ($B)</th><th>EV/Rev</th></tr></thead>
+        <tbody>
+            <tr><td>Tempus AI</td><td>8.5</td><td>11.6×</td></tr>
+            <tr><td>Schrödinger</td><td>1.8</td><td>8.2×</td></tr>
+            <tr><td>Recursion</td><td>2.5</td><td>45.5×</td></tr>
+            <tr><td>Insilico</td><td>1.0</td><td>15.4×</td></tr>
+            <tr><td>Owkin</td><td>2.1</td><td>35.0×</td></tr>
+            <tr><td>Veracyte</td><td>2.0</td><td>4.7×</td></tr>
+            <tr><td>Natera</td><td>18.5</td><td>10.6×</td></tr>
+            <tr class="highlight"><td>BiRAGAS Y5 BASE</td><td>3.7</td><td>13.0×</td></tr>
+            <tr class="highlight"><td>BiRAGAS Y5 BULL</td><td>9.0</td><td>31.4×</td></tr>
+        </tbody>
+    </table>
+  `,
+  chartTitle: "EV vs Revenue — Peer Cohort",
+  chart: {
+    type: 'scatter',
+    data: {
+        datasets: [
+            { label: 'Public Comps', data: [
+                {x: 730, y: 8.5}, {x: 220, y: 1.8}, {x: 55, y: 2.5},
+                {x: 65, y: 1.0}, {x: 60, y: 2.1}, {x: 430, y: 2.0}, {x: 1750, y: 18.5}
+            ], backgroundColor: CHART_COLORS.teal, pointRadius: 8, pointHoverRadius: 11 },
+            { label: 'BiRAGAS Y5 Base', data: [{x: 287, y: 3.7}],
+              backgroundColor: CHART_COLORS.gold, pointRadius: 13, pointStyle: 'star', borderColor: CHART_COLORS.gold, borderWidth: 2 },
+            { label: 'BiRAGAS Y5 Bull', data: [{x: 287, y: 9.0}],
+              backgroundColor: CHART_COLORS.green, pointRadius: 13, pointStyle: 'rectRot', borderColor: CHART_COLORS.green, borderWidth: 2 }
+        ]
+    },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: { x: { ...baseScaleOpts, title: { display: true, text: 'Revenue ($M)', color: '#A8B3C5' }, type: 'logarithmic' },
+                y: { ...baseScaleOpts, title: { display: true, text: 'Enterprise Value ($B)', color: '#A8B3C5' } } } }
+  },
+  narration: "Public comparables triangulate the BiRAGAS valuation envelope. Tempus AI, the closest analogue, trades at eleven point six times revenue. Peer median is thirteen times. Applied to year five revenue of two hundred eighty seven million, this implies a base case valuation of three point seven billion dollars. Platform multiple companies like Recursion and Owkin support a bull case approaching nine billion."
+},
+
+/* 50 — Acquirer categories */
+{ eyebrow: "STRATEGIC ACQUIRERS", title: "Six credible acquirer categories",
+  body: `
+    <div class="two-col">
+        <div class="col-card"><h3>1. Big Pharma — Dx Arms</h3><p>Roche · Novartis · Lilly · Pfizer</p></div>
+        <div class="col-card"><h3>2. Diagnostic Specialists</h3><p>Quest · LabCorp · Roche Diagnostics</p></div>
+        <div class="col-card"><h3>3. Life Science Tools</h3><p>Thermo Fisher · Danaher · Illumina</p></div>
+        <div class="col-card"><h3>4. Health-IT / Payer</h3><p>UnitedHealth Optum · Elevance Carelon</p></div>
+        <div class="col-card"><h3>5. Big Tech</h3><p>Alphabet Verily · Microsoft Cloud · AWS HealthLake</p></div>
+        <div class="col-card"><h3>6. PE-Backed Platforms</h3><p>KKR · Bain · Carlyle — diagnostic roll-ups</p></div>
+    </div>
+  `,
+  narration: "Six credible strategic acquirer categories. Big pharma diagnostic arms led by Roche and Novartis. Diagnostic specialists like Quest and LabCorp. Life science tools led by Thermo Fisher and Danaher. Health IT and payer aligned including Optum and Carelon. Big tech including Verily and Microsoft. And private equity backed diagnostic roll up platforms."
+},
+
+/* 51 — section */
+{ type: "section", body: `
+    <div class="section-number">17</div>
+    <div class="section-title">Risk Register</div>
+    <div class="section-tag">Eight risks · eight mitigations</div>
+`, narration: "Section seventeen. Risk register. Eight named risks with eight specific mitigations."
+},
+
+/* 52 — Risk table */
+{ eyebrow: "RISKS & MITIGATIONS", title: "Eight risks · all named · all mitigated",
+  body: `
+    <table class="tbl">
+        <thead><tr><th>Risk</th><th>Severity</th><th>Mitigation</th></tr></thead>
+        <tbody>
+            <tr><td>LDT Regulatory Shift</td><td>Medium</td><td>FDA early engagement · LDT + IVD dual path</td></tr>
+            <tr><td>Reimbursement Gaps</td><td>Med-High</td><td>MAC LCD pursuit · clinical-utility publications</td></tr>
+            <tr><td>Pharma Concentration</td><td>Medium</td><td>Cap any partner at &lt;25% of revenue</td></tr>
+            <tr><td>Foundation Model Commoditization</td><td>Medium</td><td>Curated data + causality + shield + validation</td></tr>
+            <tr><td>Talent Retention</td><td>Medium</td><td>Competitive equity · earned secondary</td></tr>
+            <tr><td>Cyber / IP Exfiltration</td><td>High</td><td>SOC 2 Type II · HIPAA + GDPR architecture</td></tr>
+            <tr><td>Biotech Capital Cycle</td><td>Medium</td><td>SAFE-bridge runway 18–24 months</td></tr>
+            <tr><td>Clinical Validation Slip</td><td>Medium</td><td>Parallel pivotal studies · statistical-power gates</td></tr>
+        </tbody>
+    </table>
+  `,
+  narration: "Eight risks have been named and mitigated. LDT regulatory shifts, reimbursement gaps, pharma concentration, foundation model commoditization, talent retention, cyber and IP exfiltration, biotech capital cycle exposure, and clinical validation timing slips."
+},
+
+/* 53 — section */
+{ type: "section", body: `
+    <div class="section-number">18</div>
+    <div class="section-title">Conclusion</div>
+    <div class="section-tag">A multi-vertical money-making engine</div>
+`, narration: "Section eighteen. Conclusion. BiRAGAS as a multi vertical money making engine."
+},
+
+/* 54 — Conclusion */
+{ eyebrow: "CONCLUSION", title: "Two of eight verticals is success — everything else is upside",
+  layout: "split",
+  bodyLeft: `
+    <p class="lead">BiRAGAS combines four differentiated capabilities no peer combines, across 60+ pre-tuned disease contexts.</p>
+    <div class="callout"><div class="callout-title">Executive case</div><p>Ten verticals addressable in parallel. Five revenue streams compose into 78% blended GM. Y5 ARR of $287M supports a $3.7B valuation.</p></div>
+    <p style="color:#FFFFFF;font-size:15px;font-weight:600;text-align:center;margin-top:6px;">Win 2 of 8 verticals · convert 3 pharma anchors in 12 months · everything else upside.</p>
+  `,
+  chartTitle: "BiRAGAS Y5 Trajectory — Conservative vs Aggressive",
+  chart: {
+    type: 'line',
+    data: { labels: ['Y1','Y2','Y3','Y4','Y5'],
+            datasets: [
+                { label: 'Conservative (2/8 verticals)', data: [9.4, 30, 70, 130, 200], borderColor: CHART_COLORS.teal, backgroundColor: 'rgba(79,195,247,.12)', tension: 0.35, fill: true, pointRadius: 4 },
+                { label: 'Base Case', data: [9.4, 44, 109, 193.5, 287], borderColor: CHART_COLORS.gold, backgroundColor: 'rgba(201,162,39,.18)', tension: 0.35, fill: true, pointRadius: 5, borderWidth: 3 },
+                { label: 'Aggressive', data: [12, 60, 145, 260, 380], borderColor: CHART_COLORS.green, backgroundColor: 'transparent', tension: 0.35, borderDash: [5,3], pointRadius: 4 }
+            ] },
+    options: { responsive: true, maintainAspectRatio: false,
+      scales: { y: { ...baseScaleOpts, title: { display: true, text: 'ARR ($M)', color: '#A8B3C5' } }, x: baseScaleOpts } }
+  },
+  narration: "The conclusion is simple to state and difficult to replicate. BiRAGAS combines four differentiated capabilities that no peer platform combines, across sixty plus pre tuned disease contexts. Executing this plan does not require BiRAGAS to win every vertical. It requires winning two of eight disease verticals and converting three anchor pharma partnerships within twelve months. Everything else is upside."
+},
+
+/* 55 — Thank You */
+{ type: "cover", body: `
+    <div class="cover-brand" style="font-size:60px;">Thank You</div>
+    <div class="cover-tag">BiRAGAS Utilization & Revenue Potential</div>
+    <div class="cover-divider"></div>
+    <div class="cover-meta" style="font-size:13px;">Ayass Bioscience, LLC · BiRAGAS, Inc.</div>
+    <div style="margin-top:24px;color:#A8B3C5;font-size:11.5px;letter-spacing:1.5px;">QUESTIONS · DUE DILIGENCE · NEXT STEPS</div>
+    <div style="margin-top:28px;color:var(--gold-soft);font-size:14px;">For complete data tables and methodology, see accompanying DOCX and Excel deliverables.</div>
+`,
+narration: "Thank you for reviewing the BiRAGAS Utilization and Revenue Potential Strategic Review. For complete data tables and methodology, please refer to the accompanying full report and Excel workbook in the BiRAGAS Utilization folder. We welcome your questions and look forward to discussing next steps."
+}
+
+];
+
+/* ============================================
+   RENDER SLIDES
+============================================ */
+const stage = document.getElementById('stage');
+const chartInstances = {};
+
+SLIDES.forEach((s, idx) => {
+    const div = document.createElement('div');
+    div.className = 'slide';
+    if (s.type === 'cover') div.classList.add('cover');
+    if (s.type === 'section') div.classList.add('section-divider');
+    div.id = `slide-${idx}`;
+    let inner = '';
+
+    if (s.type !== 'cover' && s.type !== 'section') {
+        inner += `<div class="brand-bug">BiRAGAS™</div>`;
+        if (s.eyebrow) inner += `<div class="slide-eyebrow">${s.eyebrow}</div>`;
+        if (s.title) inner += `<div class="slide-title">${s.title}</div>`;
+        if (s.subtitle) inner += `<div class="slide-subtitle">${s.subtitle}</div>`;
+        inner += `<div class="divider"></div>`;
+        inner += `<div class="slide-body">`;
+
+        if (s.layout === 'split') {
+            inner += `<div class="split">`;
+            inner += `<div class="split-left">${s.bodyLeft || s.body || ''}</div>`;
+            inner += `<div class="split-right"><div class="chart-box">`;
+            if (s.chartTitle) inner += `<div class="chart-title">${s.chartTitle}</div>`;
+            inner += `<canvas id="chart-${idx}"></canvas></div></div>`;
+            inner += `</div>`;
+        } else if (s.layout === 'full-chart') {
+            inner += `<div class="chart-full">`;
+            if (s.chartTitle) inner += `<div class="chart-title">${s.chartTitle}</div>`;
+            inner += `<canvas id="chart-${idx}" style="width:100%;height:100%;"></canvas></div>`;
+        } else {
+            inner += s.body || '';
+        }
+        inner += `</div>`;
+    } else {
+        inner = s.body || '';
+    }
+    div.innerHTML = inner;
+    stage.appendChild(div);
+});
+
+function buildChart(idx) {
+    const s = SLIDES[idx];
+    if (!s.chart) return;
+    if (chartInstances[idx]) return;
+    const canvas = document.getElementById(`chart-${idx}`);
+    if (!canvas || !window.Chart) return;
+    const ctx = canvas.getContext('2d');
+    chartInstances[idx] = new Chart(ctx, s.chart);
+}
+
+/* ============================================
+   STATE & NAVIGATION
+============================================ */
+let current = 0;
+let muted = false;
+let autoAdvance = false;
+let autoTimer = null;
+const counter = document.getElementById('counter');
+const progressBar = document.getElementById('progressBar');
+const speechDot = document.getElementById('speechDot');
+const speechStatus = document.getElementById('speechStatus');
+counter.textContent = `1 / ${SLIDES.length}`;
+
+function updateCounter() {
+    counter.textContent = `${current + 1} / ${SLIDES.length}`;
+    progressBar.style.width = `${((current + 1) / SLIDES.length) * 100}%`;
+}
+
+function showSlide(idx) {
+    document.querySelectorAll('.slide').forEach((s, i) => {
+        s.classList.toggle('active', i === idx);
+    });
+    current = idx;
+    updateCounter();
+    // Build chart for active slide (lazy)
+    setTimeout(() => buildChart(idx), 80);
+    // Stop any prior narration before swapping source
+    stopSpeak();
+    if (!muted) playSlideAudio(idx);
+    if (autoAdvance) scheduleAuto();
+}
+
+function next() {
+    if (current < SLIDES.length - 1) showSlide(current + 1);
+    else if (autoAdvance) toggleAuto();
+}
+function prev() { if (current > 0) showSlide(current - 1); }
+
+/* ============================================
+   PRE-RECORDED AUDIO NARRATION
+   Each slide has a corresponding audio/slide_N.m4a file
+============================================ */
+const audioPlayer = document.getElementById('audioPlayer');
+
+function playSlideAudio(idx) {
+    if (muted) return;
+    const src = `audio/slide_${idx + 1}.mp3`;
+    audioPlayer.src = src;
+    audioPlayer.currentTime = 0;
+    audioPlayer.play().then(() => {
+        speechDot.classList.add('speaking');
+        speechStatus.textContent = 'NARRATING';
+    }).catch(err => {
+        // Autoplay blocked until user interaction — that's fine
+        speechDot.classList.remove('speaking');
+        speechStatus.textContent = 'CLICK TO START';
+    });
+}
+
+audioPlayer.addEventListener('ended', () => {
+    speechDot.classList.remove('speaking');
+    speechStatus.textContent = 'READY';
+});
+
+audioPlayer.addEventListener('pause', () => {
+    if (audioPlayer.currentTime < audioPlayer.duration) return;
+    speechDot.classList.remove('speaking');
+    speechStatus.textContent = 'READY';
+});
+
+function stopSpeak() {
+    audioPlayer.pause();
+    audioPlayer.currentTime = 0;
+    speechDot.classList.remove('speaking');
+    speechStatus.textContent = 'READY';
+}
+
+function speak(_text) {
+    // Kept for compatibility — narration is now via playSlideAudio(idx)
+    playSlideAudio(current);
+}
+
+/* ============================================
+   CONTROLS
+============================================ */
+document.getElementById('btnNext').addEventListener('click', next);
+document.getElementById('btnPrev').addEventListener('click', prev);
+document.getElementById('btnRestart').addEventListener('click', () => {
+    stopSpeak();
+    if (!muted) playSlideAudio(current);
+});
+
+const btnMute = document.getElementById('btnMute');
+btnMute.addEventListener('click', () => {
+    muted = !muted;
+    btnMute.classList.toggle('mute-active', muted);
+    btnMute.textContent = muted ? '✕' : '♪';
+    btnMute.title = muted ? 'Unmute' : 'Mute';
+    if (muted) stopSpeak();
+});
+
+const btnAuto = document.getElementById('btnAuto');
+function scheduleAuto() {
+    clearTimeout(autoTimer);
+    autoTimer = setTimeout(() => { if (autoAdvance) next(); }, 17000);
+}
+function toggleAuto() {
+    autoAdvance = !autoAdvance;
+    btnAuto.classList.toggle('play-active', autoAdvance);
+    btnAuto.textContent = autoAdvance ? '❚❚' : '▶';
+    btnAuto.title = autoAdvance ? 'Stop auto-advance' : 'Auto-advance';
+    if (autoAdvance) scheduleAuto();
+    else clearTimeout(autoTimer);
+}
+btnAuto.addEventListener('click', toggleAuto);
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { prev(); }
+    else if (e.key === 'm' || e.key === 'M') { btnMute.click(); }
+    else if (e.key === 'a' || e.key === 'A') { btnAuto.click(); }
+    else if (e.key === 'r' || e.key === 'R') { document.getElementById('btnRestart').click(); }
+    else if (e.key === 'Home') { showSlide(0); }
+    else if (e.key === 'End')  { showSlide(SLIDES.length - 1); }
+});
+
+/* ============================================
+   PARTICLE BACKGROUND
+============================================ */
+const pCanvas = document.getElementById('particles');
+const pCtx = pCanvas.getContext('2d');
+let particles = [];
+const PARTICLE_COUNT = 70;
+function resizeCanvas() { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+class Particle {
+    constructor() { this.reset(true); }
+    reset() {
+        this.x = Math.random() * pCanvas.width;
+        this.y = Math.random() * pCanvas.height;
+        this.vx = (Math.random() - 0.5) * 0.35;
+        this.vy = (Math.random() - 0.5) * 0.35;
+        this.r = Math.random() * 1.8 + 0.6;
+        this.alpha = Math.random() * 0.45 + 0.15;
+        this.hue = Math.random() < 0.6 ? 'gold' : 'cyan';
+    }
+    update() {
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < 0 || this.x > pCanvas.width) this.vx *= -1;
+        if (this.y < 0 || this.y > pCanvas.height) this.vy *= -1;
+    }
+    draw() {
+        pCtx.beginPath();
+        const color = this.hue === 'gold'
+            ? `rgba(201,162,39,${this.alpha})`
+            : `rgba(80,160,220,${this.alpha * 0.7})`;
+        pCtx.fillStyle = color;
+        pCtx.shadowBlur = 8;
+        pCtx.shadowColor = color;
+        pCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        pCtx.fill();
+        pCtx.shadowBlur = 0;
+    }
+}
+for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const d = Math.sqrt(dx*dx + dy*dy);
+            if (d < 140) {
+                pCtx.beginPath();
+                pCtx.strokeStyle = `rgba(201,162,39,${(140 - d) / 140 * 0.18})`;
+                pCtx.lineWidth = 0.5;
+                pCtx.moveTo(particles[i].x, particles[i].y);
+                pCtx.lineTo(particles[j].x, particles[j].y);
+                pCtx.stroke();
+            }
+        }
+    }
+}
+
+function animate() {
+    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+    requestAnimationFrame(animate);
+}
+animate();
+
+/* ============================================
+   BOOT
+============================================ */
+showSlide(0);
+
+let firstInteraction = true;
+document.addEventListener('click', () => {
+    if (firstInteraction) {
+        firstInteraction = false;
+        if (!muted) playSlideAudio(current);
+    }
+}, { once: true });
+
+</script>
+</body>
+</html>
